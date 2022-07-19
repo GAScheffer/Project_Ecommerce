@@ -42,9 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # TODO REMOVER DEBUG TOOLBAR
-    'debug_toolbar'
+    'debug_toolbar',
 
-
+    'produto',
+    # 'variacao'
 ]
 
 MIDDLEWARE = [

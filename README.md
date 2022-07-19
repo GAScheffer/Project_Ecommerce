@@ -88,3 +88,53 @@ https://docs.djangoproject.com/en/4.0/howto/static-files/
  """+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
     alterado para:
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_URL)   """
+
+
+
+------------------------------------------------------------------------------
+######################     Importação no models.py     ###################
+
+Importações feitas para alterar o tamanho das imagens que são inseridas e ficarem
+padrão
+
+
+import os
+from PIL import Image
+
+
+# REDIMENCIONANDO AS IMAGENS
+
+    @staticmethod
+    def resize_image(img, new_width=800):
+
+        img_full_path = os.path.join(settings.MEDIA_ROOT, img.name)
+        img_pil = Image.open(img_full_path)
+        original_width, original_height = img_pil.size
+
+        if original_width <= new_width:
+            print('retornando, tamanho original menor ou igual que nova largura')
+            img_pil.close()
+            return
+
+        new_height = round((new_width * original_height) / original_width)
+
+        new_img = img_pil.resize((new_width, new_height), Image.LANCZOS)
+        new_img.save(
+            img_full_path,
+            optimize=True,
+            quality=50,
+        )
+        # print(img_full_path)
+        # print(img.name)  # nome da imagem
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        max_image_size = 800
+
+        if self.imagem:
+            self.resize_image(self.imagem, max_image_size)
+
+    def __str__(self):
+        return self.nome
+------------------------------------------------------------------------------
