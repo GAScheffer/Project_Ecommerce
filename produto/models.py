@@ -1,9 +1,10 @@
-from pickletools import optimize
 from django.conf import settings
 import os
 from PIL import Image
-from enum import unique
 from django.db import models
+from django.utils.text import slugify
+
+# TO ADD PRODUCT
 
 """    Produto:
         Produto:
@@ -26,20 +27,30 @@ class Produto(models.Model):
     descricao_longa = models.TextField()
     imagem = models.ImageField(
         upload_to='produto_imagens/%Y/%m/', blank=True, null=True)
-    slug = models.SlugField(unique=True)
-    preco_marketing = models.FloatField(default=0)
-    preco_marketing_promocional = models.FloatField(default=0)
+    slug = models.SlugField(unique=True, blank=True, null=True)
+    preco_marketing = models.FloatField(default=0, verbose_name='Preço')
+    preco_marketing_promocional = models.FloatField(
+        default=0, verbose_name='Preço Promocional')
     tipo = models.CharField(
         default='V',  # Variável
         max_length=1,
         choices=(
-            ('V', 'Variação'),
+            ('V', 'Variável'),
             ('S', 'Simples'),
         )
     )
 
+    def get_preco_formatado(self):
+        return f'R$ {self.preco_marketing:.2f}'.replace('.', ',')
+    get_preco_formatado.short_description = 'Preço'
 
-# REDIMENCIONANDO AS IMAGENS
+    def get_preco_marketing_promocional_formatado(self):
+        return f'R$ {self.preco_marketing_promocional:.2f}'.replace('.', ',')
+    get_preco_marketing_promocional_formatado.short_description = 'Preço Promocional'
+
+# END OF TO ADD PRODUCT
+
+# RESIZE IMAGE
 
     @staticmethod
     def resize_image(img, new_width=800):
@@ -64,7 +75,12 @@ class Produto(models.Model):
         # print(img_full_path)
         # print(img.name)  # nome da imagem
 
+# CRIANDO AUTOMATICAMENTE O SLUG
     def save(self, *args, **kwargs):
+        if not self.slug:
+            slug = f'{slugify(self.nome)}'
+            self.slug = slug
+
         super().save(*args, **kwargs)
 
         max_image_size = 800
@@ -75,7 +91,10 @@ class Produto(models.Model):
     def __str__(self):
         return self.nome
 
+# END OF RISIZE IMAGE
 
+
+# PRODUCT VARIATION
 """ Variacao:
         nome - char
         produto - FK Produto
@@ -99,3 +118,9 @@ class Variacao(models.Model):
     class Meta:
         verbose_name = 'Variação'
         verbose_name_plural = 'Variações'
+
+        # class Meta:
+        #     abstract = True
+
+
+# END OF PRODUCT VARIATION
