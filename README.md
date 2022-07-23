@@ -138,3 +138,21 @@ from PIL import Image
     def __str__(self):
         return self.nome
 ------------------------------------------------------------------------------
+1rd PARTE
+
+INSTALTION AND CONFIGURATION OF DJANGO AND OTHER COMPONENTS
+
+
+------------------------------------------------------------------------------
+
+
+2rd PARTE 
+
+Created and added the files views.py e urls.py in the folders 'Produto',
+ 'Perfil' and 'Pedido'. The test results in no fails.
+
+------------------------------------------------------------------------------
+
+3rd
+
+Addicioned of index.html (base.html), Tamplates

@@ -1,24 +1,11 @@
+from tkinter.font import BOLD
 from django.conf import settings
 import os
 from PIL import Image
 from django.db import models
+from django.forms import TextInput
 from django.utils.text import slugify
-
-# TO ADD PRODUCT
-
-"""    Produto:
-        Produto:
-            nome - Char
-            descricao_curta - Text
-            descricao_longa - Text
-            imagem - Image
-            slug - Slug
-            preco_marketing - Float
-            preco_marketing_promocional - Float
-            tipo - Choices
-                ('V', 'Variável'),
-                ('S', 'Simples'),
-"""
+from uteis import uteis
 
 
 class Produto(models.Model):
@@ -32,7 +19,7 @@ class Produto(models.Model):
     preco_marketing_promocional = models.FloatField(
         default=0, verbose_name='Preço Promocional')
     tipo = models.CharField(
-        default='V',  # Variável
+        default='V',
         max_length=1,
         choices=(
             ('V', 'Variável'),
@@ -41,16 +28,16 @@ class Produto(models.Model):
     )
 
     def get_preco_formatado(self):
-        return f'R$ {self.preco_marketing:.2f}'.replace('.', ',')
+        return uteis.formata_preco(self.preco_marketing)
     get_preco_formatado.short_description = 'Preço'
 
     def get_preco_marketing_promocional_formatado(self):
-        return f'R$ {self.preco_marketing_promocional:.2f}'.replace('.', ',')
+        return uteis(self.preco_marketing_promocional)
     get_preco_marketing_promocional_formatado.short_description = 'Preço Promocional'
 
-# END OF TO ADD PRODUCT
 
 # RESIZE IMAGE
+
 
     @staticmethod
     def resize_image(img, new_width=800):
@@ -91,19 +78,8 @@ class Produto(models.Model):
     def __str__(self):
         return self.nome
 
-# END OF RISIZE IMAGE
-
 
 # PRODUCT VARIATION
-""" Variacao:
-        nome - char
-        produto - FK Produto
-        preco - Float
-        preco_promocional - Float
-        estoque - Int
-"""
-
-
 class Variacao(models.Model):
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
     nome = models.CharField(max_length=50, blank=True, null=True)
@@ -118,9 +94,3 @@ class Variacao(models.Model):
     class Meta:
         verbose_name = 'Variação'
         verbose_name_plural = 'Variações'
-
-        # class Meta:
-        #     abstract = True
-
-
-# END OF PRODUCT VARIATION
