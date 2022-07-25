@@ -1,11 +1,9 @@
-from tkinter.font import BOLD
 from django.conf import settings
 import os
 from PIL import Image
 from django.db import models
-from django.forms import TextInput
 from django.utils.text import slugify
-from uteis import uteis
+from uteis import formatar_preco
 
 
 class Produto(models.Model):
@@ -28,11 +26,11 @@ class Produto(models.Model):
     )
 
     def get_preco_formatado(self):
-        return uteis.formata_preco(self.preco_marketing)
+        return formatar_preco.formata_preco(self.preco_marketing)
     get_preco_formatado.short_description = 'Preço'
 
     def get_preco_marketing_promocional_formatado(self):
-        return uteis(self.preco_marketing_promocional)
+        return formatar_preco.formata_preco(self.preco_marketing_promocional)
     get_preco_marketing_promocional_formatado.short_description = 'Preço Promocional'
 
 
