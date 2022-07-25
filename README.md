@@ -156,3 +156,14 @@ Created and added the files views.py e urls.py in the folders 'Produto',
 3rd
 
 Addicioned of index.html (base.html), Tamplates
+
+
+------------------------------------------------------------------------------
+
+4rd 
+
+Created uteis folder;
+Fixed price formation;
+
+
+
