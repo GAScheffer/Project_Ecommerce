@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
+from django.urls import reverse
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views import View
@@ -23,15 +24,34 @@ class DetalheProduto(DetailView):
 
 class AdicionarAoCarrinho(View):
     def get(self, *args, **kwargs):
-
-        messages.error(
-            self.request,
-            'Erro de teste'
+        http_referer = self.request.META.get(
+            'HTTP_REFERER',
+            reverse('produto:lista')
         )
-        return redirect(self.request.META['HTTP_REFERER'])
-        # Criar a função de Adicionar ao Carrinho seria ideal com JavaScript
+        variacao_id = self.request.GET.get('vid')
 
-        # return HttpResponse('Adicionar ao Carrinho')
+        if not variacao_id:
+            messages.error(
+                self.request,
+                'Produto Inexistente'
+            )
+            return redirect(http_referer)
+        variacao = get_object_or_404(models.Variacao, id=variacao_id)
+
+        if not self.request.session.get('carrinho'):
+            self.request.session['carrinho'] = {}
+            self.request.session.save()
+
+        carrinho = self.request.session['carrinho']
+
+        if variacao_id in carrinho:
+            # TODO: Variação existe no carrinho
+            pass
+        else:
+            # TODO: variação não existe no carrinho
+            pass
+
+        return HttpResponse(f'{variacao.produto}{variacao.nome}')
 
 
 class RemoverDoCarrinho(View):

@@ -31,3 +31,5 @@ if settings.DEBUG:
         path('__debug__/', include(debug_toolbar.urls)),
 
     ] + urlpatterns
+
+# end
