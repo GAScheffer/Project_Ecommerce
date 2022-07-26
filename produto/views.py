@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views import View
 from django.http import HttpResponse
+from django.contrib import messages
 from . import models
 
 
@@ -22,7 +23,15 @@ class DetalheProduto(DetailView):
 
 class AdicionarAoCarrinho(View):
     def get(self, *args, **kwargs):
-        return HttpResponse('Adicionar ao Carrinho')
+
+        messages.error(
+            self.request,
+            'Erro de teste'
+        )
+        return redirect(self.request.META['HTTP_REFERER'])
+        # Criar a função de Adicionar ao Carrinho seria ideal com JavaScript
+
+        # return HttpResponse('Adicionar ao Carrinho')
 
 
 class RemoverDoCarrinho(View):

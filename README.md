@@ -166,4 +166,14 @@ Created uteis folder;
 Fixed price formation;
 
 
+5rd
 
+Added: 
+    Product Details;
+    Product Variations;
+
+6rd
+
+Added:
+    'Add Cart' 
+    #Criar a função de Adicionar ao Carrinho seria ideal com JavaScript
